@@ -55,7 +55,7 @@ class OrderController extends Controller
         ->first();
 
         if (!$order){
-            return view('orders.order_show')->with('danger','شما سفارشی فعالی ندارید!!');
+           abort(403,'!!شما سفارش فعالی ندارید');
         }
 
     return view('orders.order_show', [

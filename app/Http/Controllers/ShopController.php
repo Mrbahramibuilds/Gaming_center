@@ -7,6 +7,7 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class ShopController extends Controller
 {
@@ -16,9 +17,12 @@ class ShopController extends Controller
         $categoris=Category::all();
         $products=Product::with('category');
 
+       
+
         if ($request->filled('category_id')){
         $products->where('category_id', $request->category_id);
         }
+
 
         if ($request->filled('sort')) {
         switch ($request->sort) {
@@ -44,7 +48,7 @@ class ShopController extends Controller
                 break;
         }
     }
-     $products = $products->get();
+    //  $products = $products->get();
         return view('dashboard',compact('products','categoris','user'));
     }
 
