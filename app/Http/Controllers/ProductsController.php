@@ -19,7 +19,7 @@ public function add_product()
     $category=Category::all();
     return view('products.add_product',compact('category'));    
 }
-public function stor_product(Request $request)
+public function stor_product(Request $request,Product $product)
 {
     {
         // 1. اعتبارسنجی ساده
@@ -27,22 +27,23 @@ public function stor_product(Request $request)
             'product_name' => 'required|string|max:255',
             'category_id'  => 'required|exists:categories,id',
             'price'        => 'required|numeric',
-            'invertory'        => 'required|string',
             'weight'       => 'nullable|string',
-            'image'        => 'nullable|string'
+            'image' => 'max:512'
         ]);
 
-
+            if ($request->hasFile('image')) {
+                    $file = $request->file('image');
+                    $filename = time().'.'.$file->getClientOriginalExtension();
+                    $file->move(public_path('/admin/uplode/products/'),$filename);
+            }
 
         // 3. INSERT با Model
-        Product::create([
+        $product->create([
             'name' => $request->product_name,
             'category_id'=> $request->category_id,
             'price'=> $request->price,
-            'inventory'=> $request->invertory,
             'weight'=> $request->weight,
-            'image'=> $request->image,
-            'created_at'=>time()
+            'image'=> $filename,
         ]);
 
         // 4. ریدایرکت

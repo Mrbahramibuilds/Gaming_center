@@ -62,7 +62,7 @@
                 <div class="card product-card h-100">
 
                     <!-- عکس محصول -->
-                    <img src="{{ asset('images/'.$product->image)}}"
+                    <img src="{{ asset('/admin/uplode/products/'.$product->image)}}"
                          class="card-img-top"
                          alt="product image">
 
@@ -82,8 +82,12 @@
                             {{ $product->weight }} :وزن
                         </p>
                         <p class="fw-bold text-success">
-                            {{ $product->inventory }} :موجودی انبار
-                        </p>
+                            موجودی انبار:
+                           @if($product->inventory==0)
+                            <span class="text-danger">ناموجود</span>
+                           @else
+                            {{ $product->inventory }}
+                            @endif                         </p>
                     <form action="{{Route('add_order',$product)}}" method="post">
                             @csrf
                          <button type="submit" class="btn btn-success">اضافه کردن به سبد خرید</button>

@@ -7,9 +7,6 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <a href="{{Route('dashboard')}}">
-                        <button type="button" class="btn btn-info btn-sm">بازگشت به فروشگاه</button>
-                    </a>
                     <div class="row">
                         <div class="col-md-4">
                             <a href="{{Route('add_product')}}">

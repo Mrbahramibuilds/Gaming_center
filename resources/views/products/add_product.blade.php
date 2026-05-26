@@ -54,11 +54,6 @@
                             <input type="number" name="price" class="form-control" placeholder="مثلاً 2500000" required>
                         </div>
 
-                        {{-- موجودی --}}
-                        <div class="mb-3">
-                            <label class="form-label">موجودی</label>
-                            <input type="number" name="invertory" class="form-control" placeholder="مثلاً 10" required>
-                        </div>
 
                         {{-- وزن --}}
                         <div class="mb-3">
@@ -69,7 +64,7 @@
                         {{-- تصویر --}}
                         <div class="mb-3">
                             <label class="form-label">تصویر محصول</label>
-                            <input type="text" name="image" class="form-control">
+                            <input type="file" name="image" class="form-control">
                         </div>
 
                         {{-- دکمه --}}
