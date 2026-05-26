@@ -1,9 +1,41 @@
 @if(auth()->check() && auth()->user()->hasRole('admin'))
-    <div class="bg-gray-900 text-white px-4 py-2 text-sm justify-between text-right">
-        <a href="{{Route('list_products')}}">
-                        <button type="button" class="btn btn-primary">پنل مدیریت محصولات</button>
-        </a>
+    
+<nav class="navbar navbar-dark bg-dark" dir="rtl">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">پنل مدیریت فروشگاه گیم سنتر</a>
+        
+        <ul class="nav">
+            <li class="nav-item dropdown">
+                <a class="nav-link text-white bg-secondary rounded-top ml-3" href="{{Route('list_products')}}" role="button">
+                    مدیریت محصولات
+                </a>
+            </li>
+            
+
+            <li class="nav-item dropdown">
+                <a class="nav-link text-white bg-secondary rounded-top ml-3" href="#" role="button">
+                    مدیریت کاربران
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link text-white bg-secondary rounded-top ml-3" href="#" role="button">
+                    مدیریت دسته بندی محصولات
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link text-white bg-secondary rounded-top ml-3" href="#" role="button">
+                    مدیریت سفارشات
+                </a>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link text-white bg-secondary rounded-top ml-3" href="#" role="button">
+                    مدیریت خرید
+                </a>
+            </li>
+        </ul>
     </div>
+</nav>
 @endif
 
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
@@ -109,5 +141,5 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div>             
 </nav>
