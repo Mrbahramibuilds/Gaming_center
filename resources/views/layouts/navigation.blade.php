@@ -1,3 +1,11 @@
+@if(auth()->check() && auth()->user()->hasRole('admin'))
+    <div class="bg-gray-900 text-white px-4 py-2 text-sm justify-between text-right">
+        <a href="{{Route('list_products')}}">
+                        <button type="button" class="btn btn-primary">پنل مدیریت محصولات</button>
+        </a>
+    </div>
+@endif
+
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

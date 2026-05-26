@@ -18,7 +18,6 @@ class ShopController extends Controller
         $products=Product::with('category');
 
        
-
         if ($request->filled('category_id')){
         $products->where('category_id', $request->category_id);
         }
@@ -48,7 +47,7 @@ class ShopController extends Controller
                 break;
         }
     }
-    //  $products = $products->get();
+     $products = $products->get();
         return view('dashboard',compact('products','categoris','user'));
     }
 
