@@ -2,7 +2,7 @@
     
 <nav class="navbar navbar-dark bg-dark" dir="rtl">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">پنل مدیریت فروشگاه گیم سنتر</a>
+        <a class="navbar-brand" href="{{Route('dashboard')}}">پنل مدیریت فروشگاه گیم سنتر</a>
         
         <ul class="nav">
             <li class="nav-item dropdown">
@@ -13,7 +13,7 @@
             
 
             <li class="nav-item dropdown">
-                <a class="nav-link text-white bg-secondary rounded-top ml-3" href="#" role="button">
+                <a class="nav-link text-white bg-secondary rounded-top ml-3" href="{{Route('list_users')}}" role="button">
                     مدیریت کاربران
                 </a>
             </li>

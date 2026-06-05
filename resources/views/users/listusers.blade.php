@@ -1,16 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight text-end">
-            {{ __('تمامی محصولات') }}
+            {{ __('لیست کاربران') }}
         </h2>
     </x-slot>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div class="row">
                         <div class="col-md-4">
-                            <a href="{{Route('add_product')}}">
-                                <button type="button" class="btn btn-success">محصول جدید</button>
+                            <a href="{{Route('add_user')}}">
+                                <button type="button" class="btn btn-success">کاربر جدید</button>
                             </a>
                         </div>
                     </div>
@@ -24,35 +23,39 @@
                                 <tr onclick='window.location="#"' style="cursor:pointer;">
                                 <th scope="col">شماره</th>
                                 <th scope="col">نام</th>
-                                <th scope="col">قیمت</th>
-                                <th scope="col">دسته بندی</th>
-                                <th scope="col">موجودی</th>
-                                <th scope="col">وزن</th>
+                                <th scope="col">ایمیل</th>
+                                <th scope="col">نقش</th>
+                                <th scope="col">توضیحات</th>
                                 <th scope="col">تنظیمات</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($products as $item)
+                                @foreach($users as $item)
                                 <tr>
                                 <th scope="row">{{$loop->iteration}}</th>
                                 <td>{{$item->name}}</td>
-                                <td>{{ $item->formatted_price }} تومان</td>
-                                <td>{{$item->category->name}}</td>
-                                <td>{{$item->inventory}}</td>
-                                <td>{{$item->weight}}</td>
+                                <td>{{$item->email}}</td>
                                 <td>
-                                    @cannot('admin-read-only')
-                                    <form action="{{Route('delete_product',$item->id)}}" method="POST" style="display:inline;">
+                                    @forelse($item->roles as $role)
+                                        <span class="badge bg-info">{{ $role->name }}</span>
+                                    @empty
+                                        <span class="badge bg-secondary">بدون نقش</span>
+                                    @endforelse
+                                </td>
+                                @foreach($item->roles as $role)
+                                <td>{{$role->description}}</td>
+                                @endforeach
+                                <td>
+                                    <form action="#" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
                                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('آیا از حذف محصول اطمینان دارید؟')">
                                                 Delete
                                             </button>
                                     </form>
-                                    <a href="{{Route('form_edit_product',$item->name)}}">
+                                    <a href="#">
                                         <button class="btn btn-warning btn-sm">Edit</button>
                                     </a>
-                                    @endcan
                                 </td>
                                 </tr>
                                 @endforeach

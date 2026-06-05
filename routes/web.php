@@ -5,7 +5,9 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use PHPUnit\Metadata\Group;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -17,12 +19,18 @@ Route::get('/dashboard',[ShopController::class, 'index'])
 Route::resource('post',PostController::class);
 Route::middleware('admin.email')->group(function(){
 
+// products managment admin panel
 Route::get('/admin/list_products',[ProductsController::class,'list_products'])->name('list_products');
 Route::get('/admin/add_product',[ProductsController::class,'add_product'])->name('add_product');
 Route::post('/admin/add_product',[ProductsController::class,'stor_product'])->name('products.store');
 Route::delete('/admin/add_product/{id}',[ProductsController::class,'drop_products'])->name('delete_product');
 Route::get('/admin/list_products/{product}/edit',[ProductsController::class, 'form_edit_product'])->name('form_edit_product');
 Route::patch('/admin/list_products/{product}/edit',[ProductsController::class,'update_product'])->name('update_product');
+
+// users managment admin panel
+Route::get('/admin/list_users',[UserController::class,'list_users'])->name('list_users');
+Route::get('/admin/add_user',[UserController::class,'add_user'])->name('add_user');
+Route::post('/admin/add_user',[UserController::class,'user_store'])->name('user_store');
 
 });
 
@@ -38,5 +46,7 @@ Route::middleware('auth')->group(function () {
     // Route::post('/list_products/{product}',[OrderController::class,'add_order'])->name('add_order')->middleware(['auth']);
     Route::delete('/dashboard/list_orders/remove/{product}',[OrderController::class,'delete_product_in_order'])->name('delete_product_in_order');
 });
+
+
 
 require __DIR__.'/auth.php';
