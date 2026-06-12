@@ -57,7 +57,7 @@
                                                 Delete
                                             </button>
                                     </form>
-                                    <a href="#">
+                                    <a href="{{Route('form_edit_user',$item->id)}}">
                                         <button class="btn btn-warning btn-sm">Edit</button>
                                     </a>
                                 </td>

@@ -28,7 +28,6 @@ class UserController extends Controller
     'email'       => 'required|email|unique:users,email',
     'password'     => 'required|min:8|confirmed',
     'role_id' => 'required|integer|exists:roles,id',
-    'discription' => 'nullable|string|max:1000',
     ]);
 
     $user = User::create([
@@ -40,5 +39,37 @@ class UserController extends Controller
         $user->roles()->attach($request->role_id);
         
         return redirect()->route('list_users');
+   }
+
+   public function form_edit_user(User $user)
+   {
+      $roles=Role::all();
+      return view('users.edit_user',compact('user','roles'));
+   }
+
+   public function update_user(Request $request , User $user)
+   { 
+      $request->validate([
+         'name'      => 'required|string|max:255',
+         'email'     => 'required|email|unique:users,email,' . $user->id,
+         'password'  => 'nullable|min:8|confirmed',  
+         'role_id'   => 'required|integer|exists:roles,id',
+         ]);
+
+          $data = [
+            'name'    => $request->name,
+            'email'   => $request->email,
+            'role_id' => $request->role_id,
+        ];
+        
+       
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        $user->update($data);
+         return redirect()->route('list_users');
+
+
    }
 }

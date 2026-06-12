@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\Metadata\Group;
 
@@ -17,21 +18,22 @@ Route::get('/dashboard',[ShopController::class, 'index'])
 ->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::resource('post',PostController::class);
-Route::middleware('admin.email')->group(function(){
+Route::middleware(['admin.email','auth'])->group(function(){
 
 // products managment admin panel
 Route::get('/admin/list_products',[ProductsController::class,'list_products'])->name('list_products');
 Route::get('/admin/add_product',[ProductsController::class,'add_product'])->name('add_product');
 Route::post('/admin/add_product',[ProductsController::class,'stor_product'])->name('products.store');
 Route::delete('/admin/add_product/{id}',[ProductsController::class,'drop_products'])->name('delete_product');
-Route::get('/admin/list_products/{product}/edit',[ProductsController::class, 'form_edit_product'])->name('form_edit_product');
-Route::patch('/admin/list_products/{product}/edit',[ProductsController::class,'update_product'])->name('update_product');
+Route::get('/admin/list_products/edit/{product}',[ProductsController::class, 'form_edit_product'])->name('form_edit_product');
+Route::patch('/admin/list_products/edit/{product}',[ProductsController::class,'update_product'])->name('update_product');
 
 // users managment admin panel
 Route::get('/admin/list_users',[UserController::class,'list_users'])->name('list_users');
 Route::get('/admin/add_user',[UserController::class,'add_user'])->name('add_user');
 Route::post('/admin/add_user',[UserController::class,'user_store'])->name('user_store');
-
+Route::get('/admin/edit_user/{user}',[UserController::class,'form_edit_user'])->name('form_edit_user');
+Route::patch('/admin/edit_user/{user}',[UserController::class,'update_user'])->name('update_user');
 });
 
 Route::middleware('auth')->group(function () {
