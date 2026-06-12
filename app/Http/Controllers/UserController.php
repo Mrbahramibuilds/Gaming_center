@@ -11,7 +11,7 @@ class UserController extends Controller
 {
    public function list_users()
    {
-    $users=User::with('roles')->get();
+    $users=User::with('role')->get();
     return view('users.listusers',compact('users'));
    }
 

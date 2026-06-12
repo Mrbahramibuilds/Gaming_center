@@ -23,7 +23,7 @@ class Checkadmin
 
          $user = Auth::user();
 
-        $isAdmin = $user->roles()
+        $isAdmin = $user->role()
             ->where('name', 'admin')
             ->exists();
 

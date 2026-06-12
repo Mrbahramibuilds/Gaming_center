@@ -36,15 +36,19 @@
                                 <td>{{$item->name}}</td>
                                 <td>{{$item->email}}</td>
                                 <td>
-                                    @forelse($item->roles as $role)
-                                        <span class="badge bg-info">{{ $role->name }}</span>
-                                    @empty
-                                        <span class="badge bg-secondary">بدون نقش</span>
-                                    @endforelse
+                                    @if($item->role == null)
+                                            <span class="badge bg-secondary">بدون نقش</span>
+                                            <td>
+                                                
+                                            </td>
+                                        @else
+                                            <span class="badge bg-info">{{ $item->role->name }}</span>
+                                          
                                 </td>
-                                @foreach($item->roles as $role)
-                                <td>{{$role->description}}</td>
-                                @endforeach
+                                <td>
+                                    {{$item->role->description}}
+                                </td>
+                                @endif
                                 <td>
                                     <form action="#" method="POST" style="display:inline;">
                                         @csrf
