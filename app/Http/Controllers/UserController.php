@@ -72,4 +72,10 @@ class UserController extends Controller
 
 
    }
+
+   public function drop_user(User $user)
+   {
+        $user->delete();
+        return redirect()->route('list_users');
+   }
 }

@@ -34,6 +34,7 @@ Route::get('/admin/add_user',[UserController::class,'add_user'])->name('add_user
 Route::post('/admin/add_user',[UserController::class,'user_store'])->name('user_store');
 Route::get('/admin/edit_user/{user}',[UserController::class,'form_edit_user'])->name('form_edit_user');
 Route::patch('/admin/edit_user/{user}',[UserController::class,'update_user'])->name('update_user');
+Route::delete('/admin/edit_user/{user}',[UserController::class,'drop_user'])->name('delete_user');
 });
 
 Route::middleware('auth')->group(function () {
