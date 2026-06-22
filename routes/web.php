@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\Metadata\Group;
@@ -35,6 +36,14 @@ Route::post('/admin/add_user',[UserController::class,'user_store'])->name('user_
 Route::get('/admin/edit_user/{user}',[UserController::class,'form_edit_user'])->name('form_edit_user');
 Route::patch('/admin/edit_user/{user}',[UserController::class,'update_user'])->name('update_user');
 Route::delete('/admin/edit_user/{user}',[UserController::class,'drop_user'])->name('delete_user');
+
+// categories managment admin panel
+Route::get('/admin/list_categories',[CategoryController::class,'list_categories'])->name('list_categories');
+Route::get('/admin/add_category',[CategoryController::class,'add_category'])->name('add_category');
+Route::post('/admin/add_category',[CategoryController::class,'category_store'])->name('category_store');
+Route::get('/admin/edit_category/{category}',[CategoryController::class,'form_edit_category'])->name('form_edit_category');
+Route::patch('/admin/edit_category/{category}',[CategoryController::class,'update_category'])->name('update_category');
+Route::delete('/admin/edit_category/{category}',[CategoryController::class,'drop_category'])->name('delete_category');
 });
 
 Route::middleware('auth')->group(function () {
