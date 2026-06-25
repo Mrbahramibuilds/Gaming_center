@@ -29,7 +29,7 @@
             </li>
 
             <li class="nav-item dropdown">
-                <a class="nav-link text-white bg-secondary rounded-top ml-3" href="#" role="button">
+                <a class="nav-link text-white bg-secondary rounded-top ml-3" href="{{Route('list_purches')}}" role="button">
                     مدیریت خرید
                 </a>
             </li>

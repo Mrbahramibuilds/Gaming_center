@@ -7,6 +7,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PurchaseController;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\Metadata\Group;
@@ -42,6 +43,14 @@ Route::post('/admin/add_category',[CategoryController::class,'category_store'])-
 Route::get('/admin/edit_category/{category}',[CategoryController::class,'form_edit_category'])->name('form_edit_category');
 Route::patch('/admin/edit_category/{category}',[CategoryController::class,'update_category'])->name('update_category');
 Route::delete('/admin/edit_category/{category}',[CategoryController::class,'drop_category'])->name('delete_category');
+
+// purcheses managment admin panel
+Route::get('/admin/list_purcheses',[PurchaseController::class,'list_purches'])->name('list_purches');
+Route::get('/admin/add_purches',[PurchaseController::class,'add_purchese'])->name('add_purches');
+Route::post('/admin/add_purches',[PurchaseController::class,'purchese_store'])->name('purches_store');
+Route::get('/admin/edit_purches/{purchase}',[PurchaseController::class,'form_edit_purchese'])->name('form_edit_purches');
+Route::patch('/admin/edit_purches/{purchase}',[PurchaseController::class,'update_purchese'])->name('update_purches');
+Route::delete('/admin/edit_purches/{purchase}',[PurchaseController::class,'drop_purches'])->name('delete_purches');
 });
 
 Route::middleware('auth')->group(function () {

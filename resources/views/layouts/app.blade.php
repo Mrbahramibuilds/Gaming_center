@@ -15,7 +15,6 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
-    </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
             @include('layouts.navigation')
@@ -35,5 +34,6 @@
             </main>
         </div>
             <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
     </body>
 </html>
