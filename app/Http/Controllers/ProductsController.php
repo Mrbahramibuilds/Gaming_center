@@ -22,22 +22,23 @@ public function add_product()
 public function stor_product(Request $request,Product $product)
 {
     {
-        // 1. اعتبارسنجی ساده
+        
         $request->validate([
             'product_name' => 'required|string|max:255',
             'category_id'  => 'required|exists:categories,id',
             'price'        => 'required|numeric',
             'weight'       => 'nullable|string',
-            'image' => 'max:512'
+            'image' => 'max:512 | nullable'
         ]);
 
+            $filename = null;
             if ($request->hasFile('image')) {
                     $file = $request->file('image');
                     $filename = time().'.'.$file->getClientOriginalExtension();
                     $file->move(public_path('/admin/uplode/products/'),$filename);
             }
 
-        // 3. INSERT با Model
+   
         $product->create([
             'name' => $request->product_name,
             'category_id'=> $request->category_id,
@@ -46,7 +47,7 @@ public function stor_product(Request $request,Product $product)
             'image'=> $filename,
         ]);
 
-        // 4. ریدایرکت
+       
         return redirect()->route('list_products');
     }
 }

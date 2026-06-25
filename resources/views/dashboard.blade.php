@@ -61,11 +61,11 @@
             <div class="col-md-3 mb-4">
                 <div class="card product-card h-100">
 
-                    <!-- عکس محصول -->
-                    <img src="{{ asset('/admin/uplode/products/'.$product->image)}}"
-                         class="card-img-top"
-                         alt="product image">
-
+                    @if($product->image)
+                    <img src="{{ asset('/admin/uplode/products/'.$product->image)}}" class="card-img-top" alt="product image">
+                    @else
+                      <img src="{{ asset('/admin/uplode/products/none_images.jpg')}}" class="card-img-top" alt="product image">
+                    @endif
                     <div class="card-body text-center">
                         <h5 class="card-title">
                             {{ $product->name }}
@@ -81,17 +81,21 @@
                         <p class="fw-bold text-success">
                             {{ $product->weight }} :وزن
                         </p>
-                        <p class="fw-bold text-success">
-                            موجودی انبار:
-                           @if($product->inventory==0)
-                            <span class="text-danger">ناموجود</span>
-                           @else
-                            {{ $product->inventory }}
-                            @endif                         </p>
-                    <form action="{{Route('add_order',$product)}}" method="post">
+                        <p class="fw-bold {{ $product->inventory > 0 ? 'text-success' : 'text-danger' }}">
+                            
+                            @if(!$product->inventory > 0)
+                                <i class="bi bi-x-circle-fill text-danger"></i> ناموجود
+                            @endif
+                        </p>
+
+                        <form action="{{ route('add_order', $product) }}" method="post">
                             @csrf
-                         <button type="submit" class="btn btn-success">اضافه کردن به سبد خرید</button>
-                    </form>
+                            <button type="submit" class="btn {{ $product->inventory > 0 ? 'btn-success' : 'btn-secondary' }}" 
+                                    {{ $product->inventory > 0 ? '' : 'disabled' }}>
+                                <i class="bi {{ $product->inventory > 0 ? 'bi-cart-plus' : 'bi-cart-x' }}"></i>
+                                {{ $product->inventory > 0 ? 'اضافه کردن به سبد خرید' : 'ناموجود' }}
+                            </button>
+                        </form>
                     </div>
                     <small class="text-muted text-center">
                    آخرین ویرایش :{{ $product->updated_at->diffForHumans() }}

@@ -11,9 +11,7 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\Metadata\Group;
 
-Route::get('/', function () {
-    return view('auth.login');
-});
+Route::get('/', [ShopController::class, 'index'])->middleware(['auth', 'verified']);
 
 Route::get('/dashboard',[ShopController::class, 'index'])
 ->middleware(['auth', 'verified'])->name('dashboard');
