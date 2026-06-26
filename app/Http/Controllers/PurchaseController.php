@@ -89,4 +89,10 @@ class PurchaseController extends Controller
     {
            return view('purchases.details_purchese', compact('purchase'));
     }
+
+    public function drop_purches(Purchase $purchase)
+    {
+        $purchase->delete();
+          return redirect()->route('list_purches');
+    }
 }

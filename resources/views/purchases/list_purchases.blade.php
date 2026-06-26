@@ -51,7 +51,7 @@
 
                                 <td>{{$item->description}}</td>
                                 <td>
-                                    <form action="#" method="POST" style="display:inline;">
+                                    <form action="{{Route('delete_purches',$item->id)}}" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
                                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('آیا از حذف خرید اطمینان دارید؟')">

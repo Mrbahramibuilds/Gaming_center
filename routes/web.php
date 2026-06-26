@@ -49,8 +49,6 @@ Route::get('/admin/list_purcheses',[PurchaseController::class,'list_purches'])->
 Route::get('/admin/add_purches',[PurchaseController::class,'add_purchese'])->name('add_purches');
 Route::post('/admin/add_purches',[PurchaseController::class,'purchese_store'])->name('purches_store');
 Route::get('/admin/details_purches/{purchase}',[PurchaseController::class,'details_purchese'])->name('details_purches');
-Route::get('/admin/edit_purches/{purchase}',[PurchaseController::class,'form_edit_purchese'])->name('form_edit_purches');
-Route::patch('/admin/edit_purches/{purchase}',[PurchaseController::class,'update_purchese'])->name('update_purches');
 Route::delete('/admin/edit_purches/{purchase}',[PurchaseController::class,'drop_purches'])->name('delete_purches');
 });
 
