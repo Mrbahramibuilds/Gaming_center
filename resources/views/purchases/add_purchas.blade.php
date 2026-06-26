@@ -7,181 +7,174 @@
 
     <div class="py-12 text-end">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <a href="{{Route('dashboard')}}">
-                        <button type="button" class="btn btn-info btn-sm">بازگشت به فروشگاه</button>
-                    </a>
-            
+
+            <a href="{{ route('dashboard') }}">
+                <button type="button" class="btn btn-info btn-sm mb-3">بازگشت به فروشگاه</button>
+            </a>
+
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    
-    <div class="container mt-5">
-    <div class="row justify-content-center text-end">
-           
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">ثبت خرید جدید</h5>
-                </div>
 
-                <div class="card-body">
-                    <form action="#" method="POST" id="purchaseForm">
-                        @csrf
+                    <div class="container mt-3">
+                        <div class="row justify-content-center text-end">
+                            <div class="card shadow-sm">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0">ثبت خرید جدید</h5>
+                                </div>
 
-                        {{-- نمایش خطاهای ولیدیشن --}}
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <strong>خطا:</strong>
-                                <ul class="mb-0 mt-2">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
+                                <div class="card-body">
+                                    {{-- آدرس action را با route ذخیره خرید خودت جایگزین کن --}}
+                                    <form action="{{Route('add_purches')}}" method="POST" id="purchaseForm">
+                                        @csrf
 
-                        {{-- اطلاعات فاکتور --}}
-                        <div class="row g-3 mb-4 text-end">
-                            <div class="col-md-6">
-                                <label class="form-label">توضیحات</label>
-                                <input type="text" name="description" class="form-control"
-                                    value="{{ old('description') }}">
-                            </div>
+                                        {{-- اطلاعات فاکتور --}}
+                                        <div class="row g-3 mb-4 text-end">
+                                            <div class="col-md-6">
+                                                <label class="form-label">توضیحات</label>
+                                                <input type="text" name="description" class="form-control"
+                                                       value="{{ old('description') }}">
+                                            </div>
 
-                            <div class="col-md-6">
-                                 <label class="form-label">تاریخ خرید</label>
-                                    <input type="text"
-                                        name="purchase_date"
-                                        class="form-control"
-                                        placeholder="مثلاً 1405/04/04"
-                                        value="{{ old('purchase_date') }}">
-                            </div>
-                        </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">تاریخ خرید</label>
+                                                <input type="text"
+                                                       name="purchase_date"
+                                                       class="form-control"
+                                                       placeholder="مثلاً 1405/04/04"
+                                                       value="{{ old('purchase_date') }}">
+                                            </div>
+                                        </div>
 
-                        <hr>
+                                        <hr>
 
-                        {{-- بخش محصولات --}}
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <button type="button" class="btn btn-success btn-sm" id="addProductRow">
-                                + افزودن محصول
-                            </button>
-                            <h5 class="mb-0">محصولات خرید</h5>
-                            
-                        </div>
-
-                        <div class="table-responsive ">
-                            <table class="table table-bordered align-middle" id="productsTable">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>محصول</th>
-                                        <th>تعداد</th>
-                                        <th>قیمت خرید</th>
-                                        <th>عملیات</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="productRows">
-                                    {{-- ردیف اول پیش‌فرض --}}
-                                    <tr class="product-row">
-                                        <td>
-                                            <select name="products[0][product_id]" class="form-select product-select" required>
-                                                <option value="">انتخاب محصول</option>
-                                                @foreach ($products as $product)
-                                                    <option value="{{ $product->id }}">
-                                                        {{ $product->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-
-                                        <td>
-                                            <input type="number"
-                                                name="products[0][quantity]"
-                                                class="form-control quantity"
-                                                min="1"
-                                                value="1"
-                                                required>
-                                        </td>
-
-                                        <td>
-                                            <input type="number"
-                                                name="products[0][buy_price]"
-                                                class="form-control buy-price"
-                                                min="0"
-                                                value="0"
-                                                required>
-                                        </td>
-
-                                        <td>
-                                            <button type="button" class="btn btn-danger btn-sm remove-row">
-                                                حذف
+                                        {{-- بخش محصولات --}}
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <button type="button" class="btn btn-success btn-sm" id="addProductRow">
+                                                + افزودن محصول
                                             </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                            <h5 class="mb-0">محصولات خرید</h5>
+                                        </div>
 
-                        {{-- جمع کل --}}
-                        <div class="row mt-4">
-                            <div class="col-md-4 ms-auto">
-                                <label class="form-label fw-bold">جمع کل فاکتور</label>
-                                <input type="text" id="grandTotal" class="form-control fw-bold" value="0" readonly>
-                            </div>
-                        </div>
+                                        <div class="table-responsive" dir="rtl">
+                                            <table class="table table-bordered align-middle text-center">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th style="width: 28%">محصول</th>
+                                                        <th style="width: 12%">تعداد</th>
+                                                        <th style="width: 22%">قیمت خرید</th>
+                                                        <th style="width: 23%">جمع ردیف</th>
+                                                        <th style="width: 15%">عملیات</th>
+                                                    </tr>
+                                                </thead>
 
-                        {{-- دکمه ثبت --}}
-                        <div class="mt-4 d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary px-4">
-                                ثبت خرید
-                            </button>
+                                               
+                                                <tbody id="productRows">
+                                                    <tr id="emptyRow">
+                                                    </tr>
+                                                </tbody>
+
+                                                <tfoot>
+                                                    <tr>
+                                                        <th colspan="3" class="text-start"><h4>جمع کل فاکتور</h4></th>
+                                                        <th>
+                                                            <span id="grandTotalDisplay" class="fw-bold"><h4>0 تومان</h4></span>
+                                                            <input type="hidden" name="total_amount" id="grandTotalRaw" value="0">
+                                                        </th>
+                                                        <th></th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+
+                                        <div class="mt-4 d-flex justify-content-end">
+                                            <button type="submit" class="btn btn-primary px-4">
+                                                ثبت خرید
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div> {{-- card-body --}}
+                            </div> {{-- card --}}
                         </div>
-                    </form>
+                    </div>
+
                 </div>
             </div>
-        
+        </div>
+    </div>
 
-        {{-- قالب option محصولات برای JS --}}
-        <script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const addBtn = document.getElementById('addProductRow');
+            const productRows = document.getElementById('productRows');
+            const grandTotalDisplay = document.getElementById('grandTotalDisplay');
+            const grandTotalRaw = document.getElementById('grandTotalRaw');
+
+            if (!addBtn || !productRows || !grandTotalDisplay || !grandTotalRaw) {
+                console.error('المان‌های لازم پیدا نشدند');
+                return;
+            }
+
             const productOptions = `
                 <option value="">انتخاب محصول</option>
                 @foreach ($products as $product)
                     <option value="{{ $product->id }}">{{ $product->name }}</option>
                 @endforeach
             `;
-        </script>
 
-        <script>
-            let rowIndex = 1;
+            let rowIndex = 0;
 
-            // افزودن ردیف جدید
-            document.getElementById('addProductRow').addEventListener('click', function () {
-                const row = `
+            // تبدیل ورودی به عدد خام
+            function normalizeNumber(value) {
+                if (!value) return 0;
+                return parseInt(value.toString().replace(/[^\d]/g, '')) || 0;
+            }
+
+            // فرمت با جداکننده سه‌رقمی
+            function formatPrice(number) {
+                number = parseInt(number) || 0;
+                return new Intl.NumberFormat('en-US').format(number);
+            }
+
+            // ساخت ردیف جدید
+            function createRow(index) {
+                return `
                     <tr class="product-row">
                         <td>
-                            <select name="products[${rowIndex}][product_id]" class="form-select product-select" required>
+                            <select name="products[${index}][product_id]" class="form-select product-select" required>
                                 ${productOptions}
                             </select>
                         </td>
 
                         <td>
                             <input type="number"
-                                name="products[${rowIndex}][quantity]"
-                                class="form-control quantity"
-                                min="1"
-                                value="1"
-                                required>
+                                   name="products[${index}][quantity]"
+                                   class="form-control quantity"
+                                   min="1"
+                                   value="1"
+                                   required>
                         </td>
 
                         <td>
-                            <input type="number"
-                                name="products[${rowIndex}][buy_price]"
-                                class="form-control buy-price"
-                                min="0"
-                                value="0"
-                                required>
+                            {{-- input نمایشی برای کاربر --}}
+                            <input type="text"
+                                   class="form-control buy-price-display"
+                                   placeholder="قیمت خرید"
+                                   inputmode="numeric"
+                                   value="0">
+
+                            {{-- input واقعی برای ارسال به سرور --}}
+                            <input type="hidden"
+                                   name="products[${index}][buy_price]"
+                                   class="buy-price"
+                                   value="0">
+
+                            <small class="text-muted d-block mt-1 price-text">0 تومان</small>
                         </td>
 
                         <td>
-                            <input type="text" class="form-control row-total" value="0" readonly>
+                            <span class="row-total-text fw-bold">0 تومان</span>
+                            <input type="hidden" class="row-total" value="0">
                         </td>
 
                         <td>
@@ -189,62 +182,111 @@
                         </td>
                     </tr>
                 `;
+            }
 
-                document.getElementById('productRows').insertAdjacentHTML('beforeend', row);
+            // محاسبه جمع یک ردیف
+            function calculateRow(row) {
+                if (!row) return;
+
+                const qty = normalizeNumber(row.querySelector('.quantity')?.value);
+                const price = normalizeNumber(row.querySelector('.buy-price')?.value);
+
+                const total = qty * price;
+
+                row.querySelector('.row-total').value = total;
+                row.querySelector('.row-total-text').textContent = formatPrice(total) + ' تومان';
+            }
+
+            // محاسبه جمع کل فاکتور
+            function calculateGrandTotal() {
+                let total = 0;
+
+                productRows.querySelectorAll('.product-row').forEach(function (row) {
+                    total += normalizeNumber(row.querySelector('.row-total')?.value);
+                });
+
+                grandTotalRaw.value = total;
+                grandTotalDisplay.textContent = formatPrice(total) + ' تومان';
+            }
+
+            // افزودن ردیف جدید
+            addBtn.addEventListener('click', function () {
+                const emptyRow = document.getElementById('emptyRow');
+                if (emptyRow) emptyRow.remove();
+
+                productRows.insertAdjacentHTML('beforeend', createRow(rowIndex));
                 rowIndex++;
+
+                const lastRow = productRows.querySelector('tr:last-child');
+                calculateRow(lastRow);
                 calculateGrandTotal();
             });
 
             // حذف ردیف
             document.addEventListener('click', function (e) {
                 if (e.target.classList.contains('remove-row')) {
-                    const rows = document.querySelectorAll('#productRows .product-row');
+                    const row = e.target.closest('.product-row');
+                    if (row) row.remove();
 
-                    // حداقل یک ردیف باقی بماند
-                    if (rows.length > 1) {
-                        e.target.closest('tr').remove();
-                        calculateGrandTotal();
+                    if (productRows.querySelectorAll('.product-row').length === 0) {
+                        productRows.innerHTML = `
+                            <tr id="emptyRow">
+                                <td colspan="5" class="text-center text-muted">
+                                    هنوز محصولی اضافه نشده است
+                                </td>
+                            </tr>
+                        `;
                     }
-                }
-            });
 
-            // محاسبه جمع ردیف و جمع کل
-            document.addEventListener('input', function (e) {
-                if (e.target.classList.contains('quantity') || e.target.classList.contains('buy-price')) {
-                    const row = e.target.closest('tr');
-                    calculateRowTotal(row);
                     calculateGrandTotal();
                 }
             });
 
-            function calculateRowTotal(row) {
-                const quantity = parseFloat(row.querySelector('.quantity').value) || 0;
-                const buyPrice = parseFloat(row.querySelector('.buy-price').value) || 0;
-                const total = quantity * buyPrice;
+            // تغییر تعداد یا قیمت
+            document.addEventListener('input', function (e) {
+                const row = e.target.closest('.product-row');
+                if (!row) return;
 
-                row.querySelector('.row-total').value = total;
-            }
+                // تغییر تعداد
+                if (e.target.classList.contains('quantity')) {
+                    calculateRow(row);
+                    calculateGrandTotal();
+                }
 
-            function calculateGrandTotal() {
-                let grandTotal = 0;
+                // تغییر قیمت
+                if (e.target.classList.contains('buy-price-display')) {
+                    const rawPrice = normalizeNumber(e.target.value);
 
-                document.querySelectorAll('.product-row').forEach(function (row) {
-                    const rowTotal = parseFloat(row.querySelector('.row-total').value) || 0;
-                    grandTotal += rowTotal;
-                });
+                    row.querySelector('.buy-price').value = rawPrice;
+                    row.querySelector('.price-text').textContent = formatPrice(rawPrice) + ' تومان';
 
-                document.getElementById('grandTotal').value = grandTotal;
-            }
-
-            // بار اول هم محاسبه شود
-            document.querySelectorAll('.product-row').forEach(function (row) {
-                calculateRowTotal(row);
+                    calculateRow(row);
+                    calculateGrandTotal();
+                }
             });
-            calculateGrandTotal();
 
-             
-        </script> 
-    </div>
-</div>
-                    
+            // وقتی فوکوس روی قیمت رفت، فرمت را بردار
+            document.addEventListener('focus', function (e) {
+                if (e.target.classList.contains('buy-price-display')) {
+                    const row = e.target.closest('.product-row');
+                    if (!row) return;
+
+                    const rawPrice = normalizeNumber(row.querySelector('.buy-price').value);
+                    e.target.value = rawPrice ? rawPrice : '';
+                }
+            }, true);
+
+            // وقتی از قیمت خارج شد، جداکننده را اعمال کن
+            document.addEventListener('blur', function (e) {
+                if (e.target.classList.contains('buy-price-display')) {
+                    const row = e.target.closest('.product-row');
+                    if (!row) return;
+
+                    const rawPrice = normalizeNumber(row.querySelector('.buy-price').value);
+                    e.target.value = rawPrice ? formatPrice(rawPrice) : '0';
+                }
+            }, true);
+
+        });
+    </script>
 </x-app-layout>

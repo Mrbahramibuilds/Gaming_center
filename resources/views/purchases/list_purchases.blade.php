@@ -25,6 +25,7 @@
                                 <th scope="col">شماره فاکتور</th>
                                 <th scope="col">وضعیت</th>
                                 <th scope="col">قیمت</th>
+                                <th scope="col">تاریخ</th>
                                 <th scope="col">توضیحات</th>
                                 <th scope="col">تنظیمات</th>
                                 </tr>
@@ -35,7 +36,13 @@
                                 <th scope="row">{{$loop->iteration}}</th>
                                 <td>{{$item->invoice_number}}</td>
                                 <td>{{$item->status}}</td>
-                                <td>{{$item->total_amount}}</td>
+                                <td>{{ number_format($item->total_amount) }} تومان</td>
+                                <td>
+                                    @if($item->purchase_date)
+                                        {{ \Morilog\Jalali\Jalalian::fromDateTime($item->purchase_date)->format('Y/m/d') }}
+                                    @endif
+                                </td>
+
                                 <td>{{$item->description}}</td>
                                 <td>
                                     <form action="#" method="POST" style="display:inline;">

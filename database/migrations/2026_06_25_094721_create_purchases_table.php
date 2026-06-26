@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
             $table->string('invoice_number')->unique();
-            $table->enum('status', ['pending', 'approved'])->default('approved');
+            $table->enum('status', ['pending', 'approved'])->default('pending');
             $table->bigInteger('total_amount')->default(0);
             $table->text('description')->nullable();
             $table->timestamps();
