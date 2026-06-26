@@ -35,7 +35,13 @@
                                 <tr>
                                 <th scope="row">{{$loop->iteration}}</th>
                                 <td>{{$item->invoice_number}}</td>
-                                <td>{{$item->status}}</td>
+                                <td>
+                                    @if(!$item->status=='pending')
+                                    تایید شده است
+                                    @else
+                                    در حال پردازش
+                                    @endif
+                                </td>
                                 <td>{{ number_format($item->total_amount) }} تومان</td>
                                 <td>
                                     @if($item->purchase_date)
@@ -52,8 +58,9 @@
                                                 Delete
                                             </button>
                                     </form>
-                                    <a href="#">
-                                        <button class="btn btn-warning btn-sm">Edit</button>
+                                    
+                                    <a href="{{Route('details_purches',$item->id)}}">
+                                        <button class="btn btn-primary btn-sm">Details</button>
                                     </a>
                                 </td>
                                 </tr>

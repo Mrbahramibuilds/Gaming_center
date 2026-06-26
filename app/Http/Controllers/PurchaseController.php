@@ -84,4 +84,9 @@ class PurchaseController extends Controller
 
     return redirect()->route('list_purches');
     }
+
+    public function details_purchese(Purchase $purchase)
+    {
+           return view('purchases.details_purchese', compact('purchase'));
+    }
 }
