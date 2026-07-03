@@ -23,7 +23,7 @@
                 </a>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link text-white bg-secondary rounded-top ml-3" href="#" role="button">
+                <a class="nav-link text-white bg-secondary rounded-top ml-3" href="{{Route('list_orders_managmet')}}" role="button">
                     مدیریت سفارشات
                 </a>
             </li>

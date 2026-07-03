@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight text-end">
-            {{ $purchase->description }}
+           فاکتور فروش {{ $order->user->name }}  
         </h2>
     </x-slot>
     <div class="py-12">
@@ -21,15 +21,15 @@
                                 <div class="row text-center text-end">
 
                                     <div class="col-md-3">
-                                        <h6>شماره فاکتور</h6>
-                                        <strong>{{ $purchase->invoice_number }}</strong>
+                                        <h6>نام کاربر</h6>
+                                        <strong>{{ $order->user->name }}</strong>
                                     </div>
 
                                     <div class="col-md-3">
                                         <h6>تاریخ خرید</h6>
                                         <strong>
-                                            @if($purchase->purchase_date)
-                                                                {{ \Morilog\Jalali\Jalalian::fromDateTime($purchase->purchase_date)->format('Y/m/d') }}
+                                            @if($order->created_at)
+                                                                {{ \Morilog\Jalali\Jalalian::fromDateTime($order->created_at)->format('Y/m/d') }}
                                             @endif
                                         </strong>
                                     </div>
@@ -37,7 +37,7 @@
                                     <div class="col-md-3">
                                         <h6>جمع کل</h6>
                                         <strong>
-                                            {{ number_format($purchase->total_amount) }}
+                                            {{ number_format($order->total_price) }}
                                             
                                             تومان
                                         </strong>
@@ -46,7 +46,7 @@
                                     <div class="col-md-3">
                                         <h6>تعداد محصولات</h6>
                                         <strong>
-                                            {{ $purchase->products->count() }}
+                                            {{ $order->products->count() }}
                                         </strong>
                                     </div>
 
@@ -67,38 +67,28 @@
                     <th>شماره</th>
                     <th>محصول</th>
                     <th>تعداد</th>
-                    <th>فی خرید</th>
-                    <th>جمع</th>
+                    <th>قیمت فروش خرید</th>
                 </tr>
             </thead>
 
             <tbody>
-                @foreach($purchase->products as $item)
+                @foreach($order->products as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->name }}</td>
                     <td>{{ $item->pivot->quantity }}</td>
 
                     <td>
-                        {{ number_format($item->pivot->buy_price) }}
+                        {{ number_format($item->price) }}
                         تومان
                     </td>
 
-                    <td>
-                        {{ number_format($item->pivot->row_total) }}
-                        تومان
-                    </td>
                 </tr>
                 @endforeach
             </tbody>
 
         </table>
 
-        @if($purchase->description)
-            <div class="alert alert-info mt-3">
-                {{ $purchase->description }}
-            </div>
-        @endif
 
     </div>
 </div>

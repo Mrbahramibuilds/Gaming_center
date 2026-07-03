@@ -50,6 +50,10 @@ Route::get('/admin/add_purches',[PurchaseController::class,'add_purchese'])->nam
 Route::post('/admin/add_purches',[PurchaseController::class,'purchese_store'])->name('purches_store');
 Route::get('/admin/details_purches/{purchase}',[PurchaseController::class,'details_purchese'])->name('details_purches');
 Route::delete('/admin/edit_purches/{purchase}',[PurchaseController::class,'drop_purches'])->name('delete_purches');
+
+// order managment admin panel
+Route::get('/admin/list_orders',[OrderController::class,'list_orders'])->name('list_orders_managmet');
+Route::get('/admin/details_order/{order}',[OrderController::class,'details_order'])->name('details_order');
 });
 
 Route::middleware('auth')->group(function () {

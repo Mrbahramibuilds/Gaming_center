@@ -103,5 +103,19 @@ class OrderController extends Controller
 
             return back()->with('success', 'محصول از سبد خرید حذف شد');
 }
+
+        public function list_orders()
+        {
+           $orders=Order::with('user')->get();
+           return view('orders_managment.list_orders',compact('orders')); 
+        }
+
+        public function details_order(Order $order)
+        {
+            $order->with('user')->get();
+            return view('orders_managment.details_order',compact('order')); 
+        }
+
+        
 }
 
