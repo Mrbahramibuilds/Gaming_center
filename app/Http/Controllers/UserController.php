@@ -36,7 +36,6 @@ class UserController extends Controller
             'password'    => Hash::make($request->password),
         ]);
 
-        $user->role()->attach($request->role_id);
         
         return redirect()->route('list_users');
    }

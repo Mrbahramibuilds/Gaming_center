@@ -64,8 +64,7 @@ Route::middleware('auth')->group(function () {
 
 // order section
     Route::get('dashboard/list_orders',[OrderController::class,'show_order'])->name('list_orders');
-    Route::post('/dashboard/{product}',[OrderController::class,'add_order'])->middleware(['auth'])->name('add_order');
-    // Route::post('/list_products/{product}',[OrderController::class,'add_order'])->name('add_order')->middleware(['auth']);
+    Route::post('/dashboard/{product}',[OrderController::class,'add_order'])->name('add_order');
     Route::delete('/dashboard/list_orders/remove/{product}',[OrderController::class,'delete_product_in_order'])->name('delete_product_in_order');
 });
 

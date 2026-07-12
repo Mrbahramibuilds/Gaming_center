@@ -35,6 +35,9 @@ class OrderController extends Controller
                 'quantity' => 1
             ]);
         }
+
+        $product->decrement('inventory', 1);
+
         $order->load('products');
 
         $total = $order->products->sum(function ($item) {
@@ -92,6 +95,9 @@ class OrderController extends Controller
         }else{
         $order->products()->detach($product->id);
         }
+
+        $product->increment('inventory', 1);
+
         $order->load('products');
 
             // 🧮 محاسبه مجدد جمع فاکتور
