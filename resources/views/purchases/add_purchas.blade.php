@@ -102,191 +102,317 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
+<script>
+            document.addEventListener('DOMContentLoaded', function () {
 
-            const addBtn = document.getElementById('addProductRow');
-            const productRows = document.getElementById('productRows');
-            const grandTotalDisplay = document.getElementById('grandTotalDisplay');
-            const grandTotalRaw = document.getElementById('grandTotalRaw');
+                const addBtn = document.getElementById('addProductRow');
+                const productRows = document.getElementById('productRows');
+                const grandTotalDisplay = document.getElementById('grandTotalDisplay');
+                const grandTotalRaw = document.getElementById('grandTotalRaw');
 
-            if (!addBtn || !productRows || !grandTotalDisplay || !grandTotalRaw) {
-                console.error('المان‌های لازم پیدا نشدند');
-                return;
-            }
+                if (!addBtn || !productRows || !grandTotalDisplay || !grandTotalRaw) {
+                    console.error('المان‌های لازم پیدا نشدند');
+                    return;
+                }
 
-            const productOptions = `
-                <option value="">انتخاب محصول</option>
-                @foreach ($products as $product)
-                    <option value="{{ $product->id }}">{{ $product->name }}</option>
-                @endforeach
-            `;
+                let rowIndex = 0;
 
-            let rowIndex = 0;
+                function normalizeNumber(value) {
+                    if (!value) return 0;
+                    return parseInt(value.toString().replace(/[^\d]/g, '')) || 0;
+                }
 
-            // تبدیل ورودی به عدد خام
-            function normalizeNumber(value) {
-                if (!value) return 0;
-                return parseInt(value.toString().replace(/[^\d]/g, '')) || 0;
-            }
+                function formatPrice(number) {
+                    number = parseInt(number) || 0;
+                    return new Intl.NumberFormat('en-US').format(number);
+                }
 
-            // فرمت با جداکننده سه‌رقمی
-            function formatPrice(number) {
-                number = parseInt(number) || 0;
-                return new Intl.NumberFormat('en-US').format(number);
-            }
+                function createRow(index) {
+                    return `
+                        <tr class="product-row">
 
-            // ساخت ردیف جدید
-            function createRow(index) {
-                return `
-                    <tr class="product-row">
-                        <td>
-                            <select name="products[${index}][product_id]" class="form-select product-select" required>
-                                ${productOptions}
-                            </select>
-                        </td>
+                            <td class="position-relative">
 
-                        <td>
-                            <input type="number"
-                                   name="products[${index}][quantity]"
-                                   class="form-control quantity"
-                                   min="1"
-                                   value="1"
-                                   required>
-                        </td>
+                                <input type="text"
+                                        class="form-control product-search"
+                                        placeholder="نام محصول را جستجو کنید">
 
-                        <td>
-                            {{-- input نمایشی برای کاربر --}}
-                            <input type="text"
-                                   class="form-control buy-price-display"
-                                   placeholder="قیمت خرید"
-                                   inputmode="numeric"
-                                   value="0">
+                                    <input type="hidden"
+                                        name="products[0][product_id]"
+                                        class="product-id">
 
-                            {{-- input واقعی برای ارسال به سرور --}}
-                            <input type="hidden"
-                                   name="products[${index}][buy_price]"
-                                   class="buy-price"
-                                   value="0">
+                                    <div class="search-results"></div>
 
-                            <small class="text-muted d-block mt-1 price-text">0 تومان</small>
-                        </td>
+                            </td>
 
-                        <td>
-                            <span class="row-total-text fw-bold">0 تومان</span>
-                            <input type="hidden" class="row-total" value="0">
-                        </td>
+                            <td>
+                                <input type="number"
+                                    name="products[${index}][quantity]"
+                                    class="form-control quantity"
+                                    min="1"
+                                    value="1"
+                                    required>
+                            </td>
 
-                        <td>
-                            <button type="button" class="btn btn-danger btn-sm remove-row">حذف</button>
-                        </td>
-                    </tr>
-                `;
-            }
+                            <td>
 
-            // محاسبه جمع یک ردیف
-            function calculateRow(row) {
-                if (!row) return;
+                                <input type="text"
+                                    class="form-control buy-price-display"
+                                    placeholder="قیمت خرید"
+                                    inputmode="numeric"
+                                    value="0">
 
-                const qty = normalizeNumber(row.querySelector('.quantity')?.value);
-                const price = normalizeNumber(row.querySelector('.buy-price')?.value);
+                                <input type="hidden"
+                                    name="products[${index}][buy_price]"
+                                    class="buy-price"
+                                    value="0">
 
-                const total = qty * price;
+                                <small class="text-muted d-block mt-1 price-text">
+                                    0 تومان
+                                </small>
 
-                row.querySelector('.row-total').value = total;
-                row.querySelector('.row-total-text').textContent = formatPrice(total) + ' تومان';
-            }
+                            </td>
 
-            // محاسبه جمع کل فاکتور
-            function calculateGrandTotal() {
-                let total = 0;
+                            <td>
+                                <span class="row-total-text fw-bold">
+                                    0 تومان
+                                </span>
 
-                productRows.querySelectorAll('.product-row').forEach(function (row) {
-                    total += normalizeNumber(row.querySelector('.row-total')?.value);
-                });
+                                <input type="hidden"
+                                    class="row-total"
+                                    value="0">
+                            </td>
 
-                grandTotalRaw.value = total;
-                grandTotalDisplay.textContent = formatPrice(total) + ' تومان';
-            }
+                            <td>
+                                <button type="button"
+                                        class="btn btn-danger btn-sm remove-row">
+                                    حذف
+                                </button>
+                            </td>
 
-            // افزودن ردیف جدید
-            addBtn.addEventListener('click', function () {
-                const emptyRow = document.getElementById('emptyRow');
-                if (emptyRow) emptyRow.remove();
+                        </tr>
+                    `;
+                }
 
-                productRows.insertAdjacentHTML('beforeend', createRow(rowIndex));
-                rowIndex++;
+                function calculateRow(row) {
 
-                const lastRow = productRows.querySelector('tr:last-child');
-                calculateRow(lastRow);
-                calculateGrandTotal();
-            });
+                    if (!row) return;
 
-            // حذف ردیف
-            document.addEventListener('click', function (e) {
-                if (e.target.classList.contains('remove-row')) {
-                    const row = e.target.closest('.product-row');
-                    if (row) row.remove();
+                    const qty = normalizeNumber(
+                        row.querySelector('.quantity')?.value
+                    );
 
-                    if (productRows.querySelectorAll('.product-row').length === 0) {
-                        productRows.innerHTML = `
-                            <tr id="emptyRow">
-                                <td colspan="5" class="text-center text-muted">
-                                    هنوز محصولی اضافه نشده است
-                                </td>
-                            </tr>
-                        `;
+                    const price = normalizeNumber(
+                        row.querySelector('.buy-price')?.value
+                    );
+
+                    const total = qty * price;
+
+                    row.querySelector('.row-total').value = total;
+
+                    row.querySelector('.row-total-text').textContent =
+                        formatPrice(total) + ' تومان';
+                }
+
+                function calculateGrandTotal() {
+
+                    let total = 0;
+
+                    productRows.querySelectorAll('.product-row').forEach(function (row) {
+
+                        total += normalizeNumber(
+                            row.querySelector('.row-total')?.value
+                        );
+
+                    });
+
+                    grandTotalRaw.value = total;
+
+                    grandTotalDisplay.textContent =
+                        formatPrice(total) + ' تومان';
+                }
+
+                addBtn.addEventListener('click', function () {
+
+                    const emptyRow = document.getElementById('emptyRow');
+
+                    if (emptyRow) {
+                        emptyRow.remove();
                     }
 
+                    productRows.insertAdjacentHTML(
+                        'beforeend',
+                        createRow(rowIndex)
+                    );
+
+                    rowIndex++;
+
+                    const lastRow =
+                        productRows.querySelector('tr:last-child');
+
+                    calculateRow(lastRow);
                     calculateGrandTotal();
-                }
-            });
+                });
 
-            // تغییر تعداد یا قیمت
-            document.addEventListener('input', function (e) {
-                const row = e.target.closest('.product-row');
-                if (!row) return;
+                document.addEventListener('click', function (e) {
 
-                // تغییر تعداد
-                if (e.target.classList.contains('quantity')) {
-                    calculateRow(row);
-                    calculateGrandTotal();
-                }
+                    if (e.target.classList.contains('remove-row')) {
 
-                // تغییر قیمت
-                if (e.target.classList.contains('buy-price-display')) {
-                    const rawPrice = normalizeNumber(e.target.value);
+                        const row =
+                            e.target.closest('.product-row');
 
-                    row.querySelector('.buy-price').value = rawPrice;
-                    row.querySelector('.price-text').textContent = formatPrice(rawPrice) + ' تومان';
+                        if (row) {
+                            row.remove();
+                        }
 
-                    calculateRow(row);
-                    calculateGrandTotal();
-                }
-            });
+                        if (
+                            productRows.querySelectorAll('.product-row')
+                                .length === 0
+                        ) {
 
-            // وقتی فوکوس روی قیمت رفت، فرمت را بردار
-            document.addEventListener('focus', function (e) {
-                if (e.target.classList.contains('buy-price-display')) {
+                            productRows.innerHTML = `
+                                <tr id="emptyRow">
+                                    <td colspan="5"
+                                        class="text-center text-muted">
+                                        هنوز محصولی اضافه نشده است
+                                    </td>
+                                </tr>
+                            `;
+                        }
+
+                        calculateGrandTotal();
+                    }
+                });
+
+                document.addEventListener('input', function (e) {
+
                     const row = e.target.closest('.product-row');
+
                     if (!row) return;
 
-                    const rawPrice = normalizeNumber(row.querySelector('.buy-price').value);
-                    e.target.value = rawPrice ? rawPrice : '';
-                }
-            }, true);
+                    if (e.target.classList.contains('quantity')) {
 
-            // وقتی از قیمت خارج شد، جداکننده را اعمال کن
-            document.addEventListener('blur', function (e) {
-                if (e.target.classList.contains('buy-price-display')) {
+                        calculateRow(row);
+                        calculateGrandTotal();
+                    }
+
+                    if (e.target.classList.contains('buy-price-display')) {
+
+                        const rawPrice =
+                            normalizeNumber(e.target.value);
+
+                        row.querySelector('.buy-price').value =
+                            rawPrice;
+
+                        row.querySelector('.price-text').textContent =
+                            formatPrice(rawPrice) + ' تومان';
+
+                        calculateRow(row);
+                        calculateGrandTotal();
+                    }
+                });
+
+                document.addEventListener('input', async function (e) {
+
+                    if (!e.target.classList.contains('product-search')) {
+                        return;
+                    }
+
+                    const keyword = e.target.value;
                     const row = e.target.closest('.product-row');
-                    if (!row) return;
+                    const resultsBox =
+                        row.querySelector('.search-results');
 
-                    const rawPrice = normalizeNumber(row.querySelector('.buy-price').value);
-                    e.target.value = rawPrice ? formatPrice(rawPrice) : '0';
-                }
-            }, true);
+                    if (keyword.length < 2) {
+                        resultsBox.innerHTML = '';
+                        return;
+                    }
 
-        });
-    </script>
+                    try {
+
+                        const response = await fetch(
+                            `/products/search?q=${encodeURIComponent(keyword)}`
+                        );
+
+                        const products = await response.json();
+
+                        let html = '';
+
+                        products.forEach(product => {
+
+                            html += `
+                                <div class="search-item"
+                                    data-id="${product.id}"
+                                    data-name="${product.name}">
+                                    ${product.name}
+                                </div>
+                            `;
+                        });
+
+                        resultsBox.innerHTML = html;
+
+                    } catch (error) {
+
+                        console.error(error);
+                    }
+                });
+
+                document.addEventListener('click', function (e) {
+
+                    if (!e.target.classList.contains('search-item')) {
+                        return;
+                    }
+
+                    const row =
+                        e.target.closest('.product-row');
+
+                    row.querySelector('.product-search').value =
+                        e.target.dataset.name;
+
+                    row.querySelector('.product-id').value =
+                        e.target.dataset.id;
+
+                    row.querySelector('.search-results').innerHTML = '';
+                });
+
+                document.addEventListener('focus', function (e) {
+
+                    if (e.target.classList.contains('buy-price-display')) {
+
+                        const row =
+                            e.target.closest('.product-row');
+
+                        if (!row) return;
+
+                        const rawPrice = normalizeNumber(
+                            row.querySelector('.buy-price').value
+                        );
+
+                        e.target.value =
+                            rawPrice ? rawPrice : '';
+                    }
+
+                }, true);
+
+                document.addEventListener('blur', function (e) {
+
+                    if (e.target.classList.contains('buy-price-display')) {
+
+                        const row =
+                            e.target.closest('.product-row');
+
+                        if (!row) return;
+
+                        const rawPrice = normalizeNumber(
+                            row.querySelector('.buy-price').value
+                        );
+
+                        e.target.value =
+                            rawPrice ? formatPrice(rawPrice) : '0';
+                    }
+
+                }, true);
+
+            });
+</script>
 </x-app-layout>

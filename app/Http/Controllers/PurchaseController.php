@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Purchase;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Validator;
 use Morilog\Jalali\Jalalian;
 
 class PurchaseController extends Controller
@@ -33,16 +34,31 @@ class PurchaseController extends Controller
         }
     public function purchese_store(Request $request)
     {
-       
-    $request->validate([
-        'purchase_date'  => 'required|string',
-        'description'    => 'nullable|string',
+            $request->validate([
+            'purchase_date' => 'required|string',
+            'description'   => 'nullable|string',
 
-        'products' => 'required|array|min:1',
-        'products.*.product_id' => 'required|exists:products,id',
-        'products.*.quantity'   => 'required|integer|min:1',
-        'products.*.buy_price'  => 'required|numeric|min:0',
-    ]);
+            'products' => 'required|array|min:1',
+
+            'products.*.product_id' => [
+                'required',
+                'integer',
+                'exists:products,id'
+            ],
+
+            'products.*.quantity' => [
+                'required',
+                'integer',
+                'min:1'
+            ],
+
+            'products.*.buy_price' => [
+                'required',
+                'numeric',
+                'min:0'
+            ],
+        ]);
+    
 
     DB::transaction(function () use ($request) {
 
@@ -95,4 +111,16 @@ class PurchaseController extends Controller
         $purchase->delete();
           return redirect()->route('list_purches');
     }
+
+    public function searchProducts(Request $request)
+{
+    $query = $request->q;
+
+    $products = Product::where('name', 'LIKE', "%{$query}%")
+        ->select('id', 'name')
+        ->limit(10)
+        ->get();
+
+    return response()->json($products);
+}
 }
